@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Inventory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .hotel-info {
+            background: #f4f4f4;
+            padding: 10px;
+            border-left: 5px solid #007bff;
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin-top: 20px;
+            color: #007bff;
+        }
+        ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Items List for Hotel: {{ $hotel->hotel_name }}</h1>
+
+    <div class="hotel-info">
+        <p><strong>Address:</strong> {{ $hotel->address }}</p>
+        <p><strong>Email:</strong> {{ $hotel->email }}</p>
+        <p><strong>Contact No:</strong> {{ $hotel->contact_no }}</p>
+        <p><strong>Website:</strong> <a href="{{ $hotel->website }}" target="_blank">{{ $hotel->website }}</a></p>
+        <p><strong>Description:</strong> {{ $hotel->description }}</p>
+    </div>
+
+    @forelse ($items as $categoryName => $categoryItems)
+        <h2>{{ $categoryName }}</h2>
+        <ul>
+            @foreach ($categoryItems as $item)
+                <li>{{ $item->name }} - {{ $item->unit_name }} ({{ $item->quantity }})</li>
+            @endforeach
+        </ul>
+    @empty
+        <p>No items found for this hotel.</p>
+    @endforelse
+
+</body>
+</html>
