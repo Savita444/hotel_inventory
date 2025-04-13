@@ -27,6 +27,10 @@ Route::get('/forgotpassword', ['as' => 'forgotpassword', 'uses' => 'App\Http\Con
 Route::post('/sendotplogin', ['as' => 'sendotplogin', 'uses' => 'App\Http\Controllers\LoginController@send_otp']);
 Route::post('/reset_password', ['as' => 'reset_password', 'uses' => 'App\Http\Controllers\LoginController@reset_password']);
 
+Route::get('/hotel/{hotel_id}', [
+    'as' => 'items.hotel_id',
+    'uses' => 'App\Http\Controllers\SuperAdmin\MasterKitchenInventoryController@getItemsByHotelView'
+]);
 Route::group(['middleware' => ['admin']], function () {
     Route::get('/logout', ['as' => 'logout', 'uses' => 'App\Http\Controllers\LoginController@logout']);
     Route::get('/change-password', ['as' => 'change-password', 'uses' => 'App\Http\Controllers\LoginController@change_password_get']);
@@ -71,10 +75,7 @@ Route::group(['middleware' => ['admin']], function () {
     Route::post('/update-items', ['as' => 'update-items', 'uses' => 'App\Http\Controllers\SuperAdmin\MasterKitchenInventoryController@updateItem']);
     Route::post('/delete-items', ['as' => 'delete-items', 'uses' => 'App\Http\Controllers\SuperAdmin\MasterKitchenInventoryController@deleteItem']);
    
-    Route::get('/hotel/{hotel_id}', [
-        'as' => 'items.hotel_id',
-        'uses' => 'App\Http\Controllers\SuperAdmin\MasterKitchenInventoryController@getItemsByHotelView'
-    ]);
+ 
 
     Route::get('/qr-scan', function () {
         return view('qr_scan'); // This loads resources/views/qr_scan.blade.php

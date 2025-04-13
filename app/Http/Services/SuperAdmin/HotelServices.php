@@ -2,7 +2,8 @@
 namespace App\Http\Services\SuperAdmin;
 
 use App\Http\Repository\SuperAdmin\HotelRepository;
-
+use Config;
+use App\Models\Hotels;
 class HotelServices
 {
 
@@ -48,28 +49,73 @@ class HotelServices
     //     }
     // }
    // Service Method
-// Service Method
+//    public function addLocation($request)
+//    {
+//        try {
+//            $locationData = $this->repo->addLocationInsert($request);
+   
+//            if (!$locationData) {
+//                return ['status' => 'error', 'msg' => 'Location Not Added.'];
+//            }
+   
+//            $last_id = $locationData['id'];
+//            $qr_svg  = $locationData['qr_svg'];
+   
+//            $path = Config::get('DocumentConstant.QR_ADD');
+//            $imageName = 'hotel_qr_' . $last_id . '.svg';
+//            $fullPath  = $path . $imageName;
+   
+//            if (!file_exists($path)) {
+//                mkdir($path, 0777, true);
+//            }
+   
+//            file_put_contents($fullPath, $qr_svg);
+   
+//            // Update path in database
+//            Hotels::where('id', $last_id)->update([
+//                'qr_code_path' => $imageName
+//            ]);
+   
+//            return ['status' => 'success', 'msg' => 'Location Added Successfully.'];
+   
+//        } catch (Exception $e) {
+//            return ['status' => 'error', 'msg' => $e->getMessage()];
+//        }
+//    }
+   
+
+
 public function addLocation($request)
 {
     try {
-        $result = $this->repo->addLocationInsert($request);
-// dd($request);
-// die();
-        if (!$result) {
-            return ['status' => 'error', 'msg' => 'Location not added.'];
+        $locationData = $this->repo->addLocationInsert($request);
+
+        if (!$locationData) {
+            return ['status' => 'error', 'msg' => 'Location Not Added.'];
         }
 
-        return [
-            'status' => 'success',
-            'msg'    => 'Location Added Successfully.',
-            'data'   => $result
-        ];
+        $last_id = $locationData['id'];
+        $qr_svg  = $locationData['qr_svg'];
 
-    } catch (\Exception $e) {
-        return ['status' => 'error', 'msg' => 'Something went wrong: ' . $e->getMessage()];
+        $path = public_path(Config::get('DocumentConstant.QR_ADD')); 
+        $imageName = 'hotel_qr_' . $last_id . '.svg';
+        $fullPath  = $path . '/' . $imageName; 
+
+        // Write the SVG content to a file
+        file_put_contents($fullPath, $qr_svg); // Save the SVG content
+
+        // Update the database with the file name/path
+        Hotels::where('id', $last_id)->update([
+            'qr_code_path' => $imageName
+        ]);
+
+        return ['status' => 'success', 'msg' => 'Location Added Successfully.'];
+
+    } catch (Exception $e) {
+        \Log::error('Error in addLocation: ' . $e->getMessage());
+        return ['status' => 'error', 'msg' => $e->getMessage()];
     }
 }
-
 
 
 

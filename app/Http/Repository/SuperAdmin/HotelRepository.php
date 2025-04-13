@@ -9,6 +9,8 @@ use App\Models\Hotels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;use Session;
 use SimpleQRCode;
+use Config;
+
 class HotelRepository
 {
     public function getLocationList()
@@ -165,7 +167,6 @@ class HotelRepository
 //         return false;
 //     }
 // }
-
 public function addLocationInsert($request)
 {
     DB::beginTransaction();
@@ -183,26 +184,13 @@ public function addLocationInsert($request)
 
         $last_insert_id = $location->id;
 
-        // ✅ Step: Generate URL for this hotel using route()
-        $url = route('items.hotel_id', ['hotel_id' => $last_insert_id]); // example: http://yourdomain.com/hotel/29
+        // Generate the URL for the QR code
+        $url = route('items.hotel_id', ['hotel_id' => $last_insert_id]);
 
-        // ✅ Step: Generate QR code for that URL
-        $qrCode = \QrCode::format('svg')->size(300)->generate($url); // format is important if saving as .svg
+        // Generate QR Code (SVG format)
+        $qrCode = \QrCode::format('svg')->size(300)->generate($url);
 
-        // ✅ Save QR code as SVG file
-        $imageName = 'hotel_qr_' . $last_insert_id . '.svg';
-        $dirPath = public_path('uploads/qrcodes/');
-        if (!file_exists($dirPath)) {
-            mkdir($dirPath, 0777, true); // create folder if doesn't exist
-        }
-        $path = $dirPath . $imageName;
-        file_put_contents($path, $qrCode);
-
-        // ✅ Save QR path in DB (corrected variable: $location)
-        $location->qr_code_path = 'uploads/qrcodes/' . $imageName;
-        $location->save();
-
-        // ✅ Log activity
+        // Log activity
         $sess_user_id   = session()->get('login_id');
         $sess_user_name = session()->get('user_name');
         $logMsg         = config('constants.SUPER_ADMIN.1116');
@@ -216,9 +204,8 @@ public function addLocationInsert($request)
         DB::commit();
 
         return [
-            'ImageName' => $imageName,
-            'id'        => $last_insert_id,
-            'qr_url'    => asset('uploads/qrcodes/' . $imageName),
+            'id'     => $last_insert_id,
+            'qr_svg' => $qrCode
         ];
 
     } catch (\Exception $e) {
@@ -227,6 +214,7 @@ public function addLocationInsert($request)
         return false;
     }
 }
+
 
     public function updateLocation($request)
     {
