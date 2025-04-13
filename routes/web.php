@@ -31,6 +31,7 @@ Route::get('/hotel/{hotel_id}', [
     'as' => 'items.hotel_id',
     'uses' => 'App\Http\Controllers\SuperAdmin\MasterKitchenInventoryController@getItemsByHotelView'
 ]);
+
 Route::group(['middleware' => ['admin']], function () {
     Route::get('/logout', ['as' => 'logout', 'uses' => 'App\Http\Controllers\LoginController@logout']);
     Route::get('/change-password', ['as' => 'change-password', 'uses' => 'App\Http\Controllers\LoginController@change_password_get']);
