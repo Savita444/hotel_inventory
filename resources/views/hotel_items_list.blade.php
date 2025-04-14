@@ -47,7 +47,26 @@
                 <li> {{ $item->item_name }} {{ $item->name }} - {{ $item->unit_name }} ({{ $item->quantity }})</li>
         
 
-              
+                <table border="1" cellpadding="5" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Name</th>
+                            <th>Unit</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($items as $item)
+                            <tr>
+                                <td>{{ $item->item_name }}</td>
+                                <td>{{ $item->name }}</td>
+                                <td>{{ $item->unit_name }}</td>
+                                <td>{{ $item->quantity }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
                 
             @endforeach
         </ul>
