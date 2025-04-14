@@ -6,7 +6,8 @@ use App\Http\Services\SuperAdmin\ShoppingListServices;
 use App\Models\
 {   MasterKitchenInventory,
     Locations,
-    LocationWiseInventory
+    LocationWiseInventory,
+    Hotels
 };
     
 use Illuminate\Http\Request;
@@ -257,19 +258,19 @@ class ShoppingListController extends Controller
             if($role == 2) {
                 $all_locations = explode(',', session()->get('locations_all'));
 
-                $locationsData = Locations::where('is_active', '1');
+                $locationsData = Hotels::where('is_active', '1');
                 $locationsData =  $locationsData->whereIn('id', $all_locations);
                 $locationsData =  $locationsData->where('is_deleted', '0')
-                                        ->select('id', 'location')
-                                        ->orderBy('location', 'asc')
+                                        ->select('id', 'hotel_name')
+                                        ->orderBy('hotel_name', 'asc')
                                         ->get()
                                         ->toArray();
 
             } else {
-                $locationsData = Locations::where('is_active', '1')
+                $locationsData = Hotels::where('is_active', '1')
                                 ->where('is_deleted', '0')
-                                ->select('id', 'location')
-                                ->orderBy('location', 'asc')
+                                ->select('id', 'hotel_name')
+                                ->orderBy('hotel_name', 'asc')
                                 ->get()
                                 ->toArray();
 
@@ -278,7 +279,7 @@ class ShoppingListController extends Controller
 
             if ($location_selected_name != '') {
 
-                $data_location_wise_inventory_new = LocationWiseInventory::leftJoin('locations', 'location_wise_inventory.location_id', '=', 'locations.id')
+                $data_location_wise_inventory_new = LocationWiseInventory::leftJoin('hotels', 'location_wise_inventory.hotel_id', '=', 'hotels.id')
                     ->leftJoin('master_kitchen_inventory', 'location_wise_inventory.inventory_id', '=', 'master_kitchen_inventory.id')
                     ->leftJoin('units', 'master_kitchen_inventory.unit', '=', 'units.id')
                     ->leftJoin('category', 'master_kitchen_inventory.category', '=', 'category.id')
@@ -296,13 +297,13 @@ class ShoppingListController extends Controller
                         'category.category_name',
                         'category.priority',
                         'units.unit_name',
-                        'locations.location'
+                        'hotels.hotel_name'
                     )
-                    ->where('master_kitchen_inventory.location_id', $location_selected_id)
+                    ->where('master_kitchen_inventory.hotel_id', $location_selected_id)
                     ->where('master_kitchen_inventory.is_deleted', '0')
                     ->where('units.is_deleted', '0')
                     ->where('category.is_deleted', '0')
-                    ->where('locations.is_deleted', '0')
+                    ->where('hotels.is_deleted', '0')
                     ->whereDate('location_wise_inventory.created_at', Carbon::now('America/New_York')->toDateString())
                     ->orderBy('category.priority', 'asc')
                     ->orderBy('master_kitchen_inventory.priority', 'asc')
@@ -312,7 +313,7 @@ class ShoppingListController extends Controller
                 
                 $new_master_inventory_items = MasterKitchenInventory::leftJoin('category', 'master_kitchen_inventory.category', '=', 'category.id')
                     ->leftJoin('units', 'master_kitchen_inventory.unit', '=', 'units.id')
-                    ->leftJoin('locations', 'master_kitchen_inventory.location_id', '=', 'locations.id')
+                    ->leftJoin('hotels', 'master_kitchen_inventory.hotel_id', '=', 'hotels.id')
                     ->select(
                         'master_kitchen_inventory.id as masterInventoryId',
                         'master_kitchen_inventory.id as locationWiseId',
@@ -325,17 +326,17 @@ class ShoppingListController extends Controller
                         'category.category_name',
                         'category.priority',
                         'units.unit_name',
-                        'locations.location'
+                        'hotels.hotel_name'
                     )
-                    ->where('master_kitchen_inventory.location_id', $location_selected_id)
+                    ->where('master_kitchen_inventory.hotel_id', $location_selected_id)
                     ->where('master_kitchen_inventory.is_deleted', '0')
                     ->where('units.is_deleted', '0')
                     ->where('category.is_deleted', '0')
-                    ->where('locations.is_deleted', '0')
+                    ->where('hotels.is_deleted', '0')
                     ->whereNotIn('master_kitchen_inventory.id', function ($query) use ($location_selected_id) {
                         $query->select('inventory_id')
                             ->from('location_wise_inventory')
-                            ->where('location_id', $location_selected_id);
+                            ->where('hotel_id', $location_selected_id);
                     })
                     ->orderBy('category.priority', 'asc')
                     ->orderBy('master_kitchen_inventory.priority', 'asc')
@@ -357,7 +358,7 @@ class ShoppingListController extends Controller
                 } else {
                     $data_location_wise_inventory = MasterKitchenInventory::leftJoin('category', 'master_kitchen_inventory.category', '=', 'category.id')
                         ->leftJoin('units', 'master_kitchen_inventory.unit', '=', 'units.id')
-                        ->leftJoin('locations', 'master_kitchen_inventory.location_id', '=', 'locations.id')
+                        ->leftJoin('hotels', 'master_kitchen_inventory.hotel_id', '=', 'hotels.id')
                         ->select(
                             'master_kitchen_inventory.id',
                             'master_kitchen_inventory.category',
@@ -369,13 +370,13 @@ class ShoppingListController extends Controller
                             'category.category_name',
                             'category.priority',
                             'units.unit_name',
-                            'locations.location'
+                            'hotels.hotel_name'
                         )
-                        ->where('master_kitchen_inventory.location_id', $location_selected_id)
+                        ->where('master_kitchen_inventory.hotel_id', $location_selected_id)
                         ->where('master_kitchen_inventory.is_deleted', '0')
                         ->where('units.is_deleted', '0')
                         ->where('category.is_deleted', '0')
-                        ->where('locations.is_deleted', '0')
+                        ->where('hotels.is_deleted', '0')
                         ->orderBy('category.priority', 'asc')             // New items won't have quantity yet
                         ->orderBy('master_kitchen_inventory.priority', 'asc') // Order by category name first
                         ->get()
@@ -486,14 +487,14 @@ class ShoppingListController extends Controller
 
             // }
             // $LocationId = $request->input('location_id');
-            $LocationValData = $request->input('location_id');
+            $LocationValData = $request->input('hotel_id');
             $DateValData     = $request->input('inventory_date');
 
             $data_location_wise_inventory = [];
-            $locationsData                = Locations::where('is_active', '1')
+            $locationsData                = Hotels::where('is_active', '1')
                 ->where('is_deleted', '0')
-                ->select('id', 'location')
-                ->orderBy('location', 'asc')
+                ->select('id', 'hotel_name')
+                ->orderBy('hotel_name', 'asc')
                 ->get()
                 ->toArray();
 
@@ -504,7 +505,7 @@ class ShoppingListController extends Controller
                 $LocationName = $location_val_data->location;
             }
 
-            $user_data = LocationWiseInventory::leftJoin('locations', 'location_wise_inventory.location_id', '=', 'locations.id')
+            $user_data = LocationWiseInventory::leftJoin('hotels', 'location_wise_inventory.hotel_id', '=', 'hotels.id')
                 ->leftJoin('master_kitchen_inventory', 'location_wise_inventory.inventory_id', '=', 'master_kitchen_inventory.id')
                 ->leftJoin('units', 'master_kitchen_inventory.unit', '=', 'units.id')
                 ->leftJoin('category', 'master_kitchen_inventory.category', '=', 'category.id')
@@ -519,9 +520,9 @@ class ShoppingListController extends Controller
                     'location_wise_inventory.id as locationWiseId',
                     'category.category_name',
                     'units.unit_name',
-                    'locations.location'
+                    'hotels.hotel_name'
                 )
-                ->where('location_wise_inventory.location_id', $LocationValData)
+                ->where('location_wise_inventory.hotel_id', $LocationValData)
                 ->whereDate('location_wise_inventory.created_at', $DateValData)
                 ->where('master_kitchen_inventory.is_deleted', '0')
                 ->orderBy('category.category_name', 'asc')             // if($location_selected_name !=''){
@@ -539,20 +540,20 @@ class ShoppingListController extends Controller
     public function getInventorySubmitHistory(Request $request)
     {
         try {
-            $LocationValData = $request->input('location_id');
+            $LocationValData = $request->input('hotel_id');
             $DateValData     = $request->input('inventory_date');
 
-            $locationsData = Locations::where('is_active', '1')
+            $locationsData = Hotels::where('is_active', '1')
                 ->where('is_deleted', '0')
-                ->select('id', 'location')
-                ->orderBy('location', 'asc')
+                ->select('id', 'hotel_name')
+                ->orderBy('hotel_name', 'asc')
                 ->get()
                 ->toArray();
 
-            $location_val_data = Locations::find($LocationValData);
+            $location_val_data = Hotels::find($LocationValData);
             $LocationName      = $location_val_data->location;
 
-            $user_data = LocationWiseInventory::leftJoin('locations', 'location_wise_inventory.location_id', '=', 'locations.id')
+            $user_data = LocationWiseInventory::leftJoin('hotels', 'location_wise_inventory.hotel_id', '=', 'hotels.id')
                 ->leftJoin('master_kitchen_inventory', 'location_wise_inventory.inventory_id', '=', 'master_kitchen_inventory.id')
                 ->leftJoin('units', 'master_kitchen_inventory.unit', '=', 'units.id')
                 ->leftJoin('category', 'master_kitchen_inventory.category', '=', 'category.id')
@@ -567,9 +568,9 @@ class ShoppingListController extends Controller
                     'location_wise_inventory.id as locationWiseId',
                     'category.category_name',
                     'units.unit_name',
-                    'locations.location'
+                    'hotels.hotel_name'
                 )
-                ->where('location_wise_inventory.location_id', $LocationValData)
+                ->where('location_wise_inventory.hotel_id', $LocationValData)
                 ->whereDate('location_wise_inventory.created_at', $DateValData)
                 ->where('master_kitchen_inventory.is_deleted', '0')
                 ->orderBy('category.category_name', 'asc')             // }
@@ -594,7 +595,7 @@ class ShoppingListController extends Controller
             //                  ->orWhere('email', 'like', "%$query%")
             //                  ->orWhere('phone', 'like', "%$query%")
 
-            $data_location_wise_inventory = LocationWiseInventory::leftJoin('locations', 'location_wise_inventory.location_id', '=', 'locations.id')
+            $data_location_wise_inventory = LocationWiseInventory::leftJoin('hotels', 'location_wise_inventory.hotel_id', '=', 'hotels.id')
                 ->leftJoin('master_kitchen_inventory', 'location_wise_inventory.inventory_id', '=', 'master_kitchen_inventory.id')
                 ->leftJoin('units', 'master_kitchen_inventory.unit', '=', 'units.id')
                 ->leftJoin('category', 'master_kitchen_inventory.category', '=', 'category.id')
@@ -609,16 +610,16 @@ class ShoppingListController extends Controller
                     'location_wise_inventory.id as locationWiseId',
                     'category.category_name',
                     'units.unit_name',
-                    'locations.location'
+                    'hotels.hotel_name'
                 )
-                ->where('master_kitchen_inventory.location_id', $location_selected_id)
+                ->where('master_kitchen_inventory.hotel_id', $location_selected_id)
                 ->where('master_kitchen_inventory.is_deleted', '0')
                 ->whereDate('location_wise_inventory.created_at', now()->toDateString())
                 ->when($query, function ($q) use ($query) {
                     $q->where(function ($subQuery) use ($query) {
                         $subQuery->orWhere('master_kitchen_inventory.item_name', 'like', "%$query%")
                             ->orWhere('category.category_name', 'like', "%$query%")
-                            ->orWhere('locations.location', 'like', "%$query%");
+                            ->orWhere('hotels.hotel_name', 'like', "%$query%");
                     });
                 })
                                                                    //                  ->get();

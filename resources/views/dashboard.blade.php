@@ -87,7 +87,7 @@
                             <h4 class="mt-2">{{ $return_data['LocationWiseInventoryCount'] }}</h4>
                             <!-- Moved below the icon -->
                             <div class="icon-divider"></div>
-                            <span class="mt-3">For Update Kitchen Inventory</span>
+                            <span class="mt-3">For Update Hotel Inventory</span>
                         </div>
                     </a>
                 </div>
@@ -184,7 +184,7 @@
                             <h4 class="mt-2">{{ $return_data['LocationWiseInventoryCount'] }}</h4>
                             <!-- Moved below the icon -->
                             <div class="icon-divider"></div>
-                            <span class="mt-3">For Update Kitchen Inventory</span>
+                            <span class="mt-3">For Update Hotel Inventory</span>
                         </div>
                     </a>
                 </div>
@@ -221,7 +221,7 @@
                             <h4 class="mt-2">{{ $return_data['LocationWiseInventoryCount'] }}</h4>
                             <!-- Moved below the icon -->
                             <div class="icon-divider"></div>
-                            <span class="mt-3">For Update Kitchen Inventory</span>
+                            <span class="mt-3">For Update Hotel Inventory</span>
                         </div>
                     </a>
                 </div>

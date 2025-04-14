@@ -32,7 +32,7 @@
                     <i class="bi bi-arrow-90deg-left"></i>
                 </button>
             </a>
-            <h5 class="sub-title">Update Kitchen Inventory</h5>
+            <h5 class="sub-title">Update Hotel Inventory</h5>
             <a href="#">
                 <!-- <button class="btn btn-light">
                     <i class="bi bi-check2"></i>
@@ -63,7 +63,7 @@
                             <option value="">Select Location</option>
                             @foreach ($locationsData as $locations)
                                 <option value="{{ $locations['id'] }}"
-                                    @if (session('location_selected') == $locations['id']) selected @endif>{{ $locations['location'] }}
+                                    @if (session('location_selected') == $locations['id']) selected @endif>{{ $locations['hotel_name'] }}
                                 </option>
                             @endforeach
                         </select>

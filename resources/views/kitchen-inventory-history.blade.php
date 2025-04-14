@@ -163,11 +163,11 @@
                 <div class="row mb-3">
                     <label class="col-md-6 col-sm-12 col-lg-6 form-label">Select Location</label>
                     <div class="col-md-6 col-sm-12 col-lg-6">
-                        <select class="form-select select2" name="location_id"
+                        <select class="form-select select2" name="hotel_id"
                             data-placeholder="Select Location" id="locationSelect">
                             <option value="">Select Location</option>
                             @foreach ($locationsData as $locationItem)
-                                <option value="{{ $locationItem['id'] }}">{{ $locationItem['location'] }}</option>
+                                <option value="{{ $locationItem['id'] }}">{{ $locationItem['hotel_name'] }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -267,7 +267,7 @@
     // Initialize validation for the add form
     $("#frm_register_add").validate({
       rules: {
-        location_id: {
+        hotel_id: {
           required: true
           // minlength: 3
         },
@@ -278,7 +278,7 @@
         
       },
       messages: {
-        location_id: {
+        hotel_id: {
           required: "Please select the Location"
           // minlength: "Category name must be at least 3 characters long"
         },
