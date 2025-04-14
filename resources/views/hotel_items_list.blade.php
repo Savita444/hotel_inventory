@@ -47,7 +47,8 @@
         <h2>{{ $categoryName }}</h2>
         <ul>
             @foreach ($categoryItems as $item)
-                <li>{{ $item->name }} - {{ $item->unit_name }} ({{ $item->quantity }})</li>
+                <li> {{ $item->item_name }} {{ $item->name }} - {{ $item->unit_name }} ({{ $item->quantity }})</li>
+                <li></li>
             @endforeach
         </ul>
     @empty
