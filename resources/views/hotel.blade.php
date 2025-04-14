@@ -153,7 +153,12 @@
                                 
                               <div class="row "> 
                                 <span
-                                    class="act-user me-2">{{ ($locations_data->currentPage() - 1) * $locations_data->perPage() + $loop->iteration }})
+                                    class="act-user me-2"> <img class="img-size" 
+                                    src="{{ Config::get('DocumentConstant.HOTEL_IMAGE_VIEW') }}{{ $item->image }}"
+                                    alt=" no Image" style="width: 100px !important; height: 100px;border-radius: 50%;" />
+                                </span>
+                                <span
+                                    class="act-user me-2">{{ ($locations_data->currentPage() - 1) * $locations_data->perPage() + $loop->iteration }}
                                     {{ $item->hotel_name }}
                                 </span>
                                
@@ -624,15 +629,27 @@
                 </div>
             </div>
             <div class="row mb-3">
+                    <label class="col-md-6 col-sm-12 col-lg-6 form-label">Image :</label>
+                    <div class="col-md-6 col-sm-12 col-lg-6">
+                    <input type="file" name="image" id="image"
+                        accept="image/*" value="{{ old('image') }}"
+                        class="form-control mb-2">
+                    @if ($errors->has('image'))
+                        <span class="red-text"><?php echo $errors->first('image', ':message'); ?></span>
+                    @endif
+                    </div>
+                
+            </div>
+            {{-- <div class="row mb-3">
                 <label class="col-md-6 col-sm-12 col-lg-6 form-label">QR Code Path:</label>
-                <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="col-md-6 col-sm-12 col-lg-6"> --}}
                     {{-- <input type="hidden" name="qr_code_path" id="qr_code_path" value="{{ old('qr_code_path') }}"> --}}
                     <!-- Optionally, you can display the QR code image if it exists -->
                     {{-- @if (old('qr_code_path'))
                         <img src="{{ asset('storage/qr_codes/' . old('qr_code_path')) }}" alt="QR Code" width="100">
                     @endif --}}
-                </div>
-            </div>
+                {{-- </div>
+            </div> --}}
             <hr />
 
             <div class="d-flex justify-content-around">

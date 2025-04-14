@@ -16,7 +16,7 @@ class HotelRepository
     public function getLocationList()
     {
         try {
-            $data_location = Hotels::select('id', 'hotel_name','description','type','contact_no','address','email', 'website','qr_code_path')
+            $data_location = Hotels::select('id', 'hotel_name','description','type','contact_no','address','email', 'website','qr_code_path', 'image')
                 ->where('is_deleted', '0')
                 ->orderBy('id', 'desc')
                 ->paginate(10);
@@ -118,6 +118,59 @@ class HotelRepository
     //         info($e->getMessage());
     //     }
     // }
+// public function addLocationInsert($request)
+// {
+//     DB::beginTransaction();
+
+//     try {
+//         $location = new Hotels();
+//         $location->hotel_name  = $request['hotel_name'];
+//         $location->description = $request['description'];
+//         $location->contact_no  = $request['contact_no'];
+//         $location->type        = $request['type'];
+//         $location->address     = $request['address'];
+//         $location->email       = $request['email'];
+//         $location->website     = $request['website'];
+//         $location->save();
+
+//         $last_insert_id = $location->id;
+        
+//         $url = route('items.hotel_id', ['hotel_id' => $last_insert_id]);
+
+//         $qrCode = \QrCode::format('svg')->size(300)->generate($url);
+
+
+//         $ImageName = $last_insert_id .'_' . rand( 100000, 999999 ) . '_image.' . $request->image->extension();
+
+//         $finalOutput = Hotels::find( $last_insert_id );
+//         // Assuming $request directly contains the ID
+//         $finalOutput->image = $ImageName;
+
+//         // Log activity
+//         $sess_user_id   = session()->get('login_id');
+//         $sess_user_name = session()->get('user_name');
+//         $logMsg         = config('constants.SUPER_ADMIN.1116');
+//         $finalLogMsg    = $sess_user_name . ' ' . $logMsg;
+
+//         $activityLog = new ActivityLog();
+//         $activityLog->user_id = $sess_user_id;
+//         $activityLog->activity_message = $finalLogMsg;
+//         $activityLog->save();
+
+//         DB::commit();
+
+//         return [
+//             'id'     => $last_insert_id,
+//             'qr_svg' => $qrCode,
+//             'ImageName' => $ImageName
+//         ];
+
+//     } catch (\Exception $e) {
+//         DB::rollBack();
+//         \Log::error('Error in addLocationInsert: ' . $e->getMessage());
+//         return false;
+//     }
+// }
 public function addLocationInsert($request)
 {
     DB::beginTransaction();
@@ -131,6 +184,10 @@ public function addLocationInsert($request)
         $location->address     = $request['address'];
         $location->email       = $request['email'];
         $location->website     = $request['website'];
+
+        // ✅ FIX: Set temporary image value (to avoid NOT NULL error)
+        $location->image = '';  // or set a default image name if required
+
         $location->save();
 
         $last_insert_id = $location->id;
@@ -138,6 +195,12 @@ public function addLocationInsert($request)
         $url = route('items.hotel_id', ['hotel_id' => $last_insert_id]);
 
         $qrCode = \QrCode::format('svg')->size(300)->generate($url);
+
+        $ImageName = $last_insert_id .'_' . rand(100000, 999999) . '_image.' . $request->image->extension();
+
+        $finalOutput = Hotels::find($last_insert_id);
+        $finalOutput->image = $ImageName;
+        $finalOutput->save(); // ✅ Don't forget to save after setting image
 
         // Log activity
         $sess_user_id   = session()->get('login_id');
@@ -153,8 +216,9 @@ public function addLocationInsert($request)
         DB::commit();
 
         return [
-            'id'     => $last_insert_id,
-            'qr_svg' => $qrCode
+            'id'        => $last_insert_id,
+            'qr_svg'    => $qrCode,
+            'ImageName' => $ImageName
         ];
 
     } catch (\Exception $e) {

@@ -20,6 +20,7 @@ class Hotels extends Model
         'email',
         'website',
         'qr_code_path',
+        'image',
         'is_active',
         'is_deleted'
     ];
