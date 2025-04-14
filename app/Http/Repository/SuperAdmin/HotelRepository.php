@@ -118,55 +118,6 @@ class HotelRepository
     //         info($e->getMessage());
     //     }
     // }
-//     public function addLocationInsert($request)
-// {
-//     DB::beginTransaction();
-    
-//     try {
-//         $location = new Hotels();
-//         $location->hotel_name  = $request['hotel_name'];
-//         $location->description = $request['description'];
-//         $location->contact_no  = $request['contact_no'];
-//         $location->type        = $request['type'];
-//         $location->address     = $request['address'];
-//         $location->email       = $request['email'];
-//         $location->website     = $request['website'];
-//         $location->save();
-        
-//         $last_insert_id = $location->id;
-//         // Step 2: Generate QR code for the hotel ID
-//         $qrCode = \QrCode::size(300)->generate($last_insert_id); 
-
-//         $imageName = 'hotel_qr_' . $last_insert_id . '.svg';
-//         $path = public_path('uploads/qrcodes/' . $imageName);
-//         file_put_contents($path, $qrCode); 
-        
-       
-//         $sess_user_id   = session()->get('login_id');
-//         $sess_user_name = session()->get('user_name');
-//         $logMsg         = config('constants.SUPER_ADMIN.1116');
-//         $finalLogMsg    = $sess_user_name . ' ' . $logMsg;
-
-//         $activityLog = new ActivityLog();
-//         $activityLog->user_id = $sess_user_id;
-//         $activityLog->activity_message = $finalLogMsg;
-//         $activityLog->save();
-
-//         DB::commit();
-
-//         // Step 5: Return QR image and hotel ID
-//         return [
-//             'ImageName' => $imageName,
-//             'id'        => $last_insert_id,
-//             'qr_url'    => asset('uploads/qrcodes/' . $imageName),
-//         ];
-
-//     } catch (\Exception $e) {
-//         DB::rollBack();
-//         Log::error('Error in addLocationInsert: ' . $e->getMessage());
-//         return false;
-//     }
-// }
 public function addLocationInsert($request)
 {
     DB::beginTransaction();
@@ -183,11 +134,9 @@ public function addLocationInsert($request)
         $location->save();
 
         $last_insert_id = $location->id;
-
-        // Generate the URL for the QR code
+        
         $url = route('items.hotel_id', ['hotel_id' => $last_insert_id]);
 
-        // Generate QR Code (SVG format)
         $qrCode = \QrCode::format('svg')->size(300)->generate($url);
 
         // Log activity
@@ -214,7 +163,6 @@ public function addLocationInsert($request)
         return false;
     }
 }
-
 
     public function updateLocation($request)
     {

@@ -28,63 +28,6 @@ class HotelServices
         }
     }
 
-    // public function addLocation($request)
-    // {
-    //     try {
-    //         $last_id = $this->repo->addLocationInsert($request);
-
-    //         $path = Config::get('DocumentConstant.QR_ADD');
-    //         $ImageName = $last_id['ImageName'];
-    //         uploadImage($request, 'qr_code_path', $path, $ImageName);
-    //         // dd($last_id);
-    //         if ($last_id) {
-    //             return ['status' => 'success', 'msg' => 'Location Added Successfully.'];
-    //         } else {
-    //             return ['status' => 'error', 'msg' => 'Location get Not Added.'];
-    //         }
-    //         // }
-
-    //     } catch (Exception $e) {
-    //         return ['status' => 'error', 'msg' => $e->getMessage()];
-    //     }
-    // }
-   // Service Method
-//    public function addLocation($request)
-//    {
-//        try {
-//            $locationData = $this->repo->addLocationInsert($request);
-   
-//            if (!$locationData) {
-//                return ['status' => 'error', 'msg' => 'Location Not Added.'];
-//            }
-   
-//            $last_id = $locationData['id'];
-//            $qr_svg  = $locationData['qr_svg'];
-   
-//            $path = Config::get('DocumentConstant.QR_ADD');
-//            $imageName = 'hotel_qr_' . $last_id . '.svg';
-//            $fullPath  = $path . $imageName;
-   
-//            if (!file_exists($path)) {
-//                mkdir($path, 0777, true);
-//            }
-   
-//            file_put_contents($fullPath, $qr_svg);
-   
-//            // Update path in database
-//            Hotels::where('id', $last_id)->update([
-//                'qr_code_path' => $imageName
-//            ]);
-   
-//            return ['status' => 'success', 'msg' => 'Location Added Successfully.'];
-   
-//        } catch (Exception $e) {
-//            return ['status' => 'error', 'msg' => $e->getMessage()];
-//        }
-//    }
-   
-
-
 public function addLocation($request)
 {
     try {
@@ -101,10 +44,8 @@ public function addLocation($request)
         $imageName = 'hotel_qr_' . $last_id . '.svg';
         $fullPath  = $path . '/' . $imageName; 
 
-        // Write the SVG content to a file
-        file_put_contents($fullPath, $qr_svg); // Save the SVG content
-
-        // Update the database with the file name/path
+        file_put_contents($fullPath, $qr_svg); 
+        
         Hotels::where('id', $last_id)->update([
             'qr_code_path' => $imageName
         ]);
@@ -115,11 +56,7 @@ public function addLocation($request)
         \Log::error('Error in addLocation: ' . $e->getMessage());
         return ['status' => 'error', 'msg' => $e->getMessage()];
     }
-}
-
-
-
-
+  }
     
     public function editLocation($request)
     {

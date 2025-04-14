@@ -180,33 +180,6 @@ class MasterKitchenInventoryController extends Controller
         }
     }
 
-
-    // ====================
-
-    // public function getItemsByHotelView($hotel_id)
-    // {
-        
-    //     $items = MasterKitchenInventory::leftJoin('category', 'master_kitchen_inventory.category', '=', 'category.id')
-    //         ->leftJoin('units', 'master_kitchen_inventory.unit', '=', 'units.id')
-    //         ->leftJoin('hotels', 'master_kitchen_inventory.hotel_id', '=', 'hotels.id')
-    //         ->select(
-    //             'master_kitchen_inventory.*',
-    //             'category.category_name',
-    //             'units.unit_name',
-    //             'hotels.hotel_name'
-    //         )
-    //         ->where('master_kitchen_inventory.is_deleted', 0)
-    //         ->where('category.is_deleted', 0)
-    //         ->where('master_kitchen_inventory.hotel_id', $hotel_id)
-    //         ->orderBy('category.priority')
-    //         ->orderBy('master_kitchen_inventory.priority')
-    //         ->get()
-    //         ->groupBy('category_name'); 
-
-       
-    //     return view('hotel_items_list', compact('items'));
-    // }
-
     public function getItemsByHotelView($hotel_id) 
     {
         $items = MasterKitchenInventory::leftJoin('category', 'master_kitchen_inventory.category', '=', 'category.id')
@@ -230,8 +203,6 @@ class MasterKitchenInventoryController extends Controller
     
         return view('hotel_items_list', compact('items', 'hotel'));
     }
-    
-    // ======================
     public function deleteItem(Request $request)
     {
         try {
