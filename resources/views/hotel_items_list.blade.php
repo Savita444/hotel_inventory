@@ -57,14 +57,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($items as $item)
+                       
                             <tr>
                                 <td>{{ $item->item_name }}</td>
                                 <td>{{ $item->name }}</td>
                                 <td>{{ $item->unit_name }}</td>
                                 <td>{{ $item->quantity }}</td>
                             </tr>
-                        @endforeach
+                     
                     </tbody>
                 </table>
                 
