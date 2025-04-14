@@ -54,7 +54,7 @@ class ShoppingListRepository
                     $LocationWiseInventoryData               = new LocationWiseInventory();
                     $LocationWiseInventoryData->user_id      = $sess_user_id;
                     $LocationWiseInventoryData->inventory_id = $inventoryIds[$index];
-                    $LocationWiseInventoryData->location_id  = $sess_location_id;
+                    $LocationWiseInventoryData->hotel_id  = $sess_location_id;
                     $LocationWiseInventoryData->quantity     = $quantities[$index];
 
                     $LocationWiseInventoryData->master_quantity = $master_quantity[$index];
