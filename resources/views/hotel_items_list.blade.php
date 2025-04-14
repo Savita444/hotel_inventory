@@ -36,11 +36,8 @@
     <h1>Items List for Hotel: {{ $hotel->hotel_name }}</h1>
 
     <div class="hotel-info">
-        <p><strong>Address:</strong> {{ $hotel->address }}</p>
-        <p><strong>Email:</strong> {{ $hotel->email }}</p>
-        <p><strong>Contact No:</strong> {{ $hotel->contact_no }}</p>
-        <p><strong>Website:</strong> <a href="{{ $hotel->website }}" target="_blank">{{ $hotel->website }}</a></p>
-        <p><strong>Description:</strong> {{ $hotel->description }}</p>
+        <p><strong>Contact No:</strong> {{ $hotel->contact_no }}<strong>Email:</strong> {{ $hotel->email }}
+            <strong>Address:</strong> {{ $hotel->address }}<strong>Website:</strong> <a href="{{ $hotel->website }}" target="_blank">{{ $hotel->website }}</a></p>     
     </div>
 
     @forelse ($items as $categoryName => $categoryItems)
@@ -48,7 +45,10 @@
         <ul>
             @foreach ($categoryItems as $item)
                 <li> {{ $item->item_name }} {{ $item->name }} - {{ $item->unit_name }} ({{ $item->quantity }})</li>
-                <li></li>
+        
+
+              
+                
             @endforeach
         </ul>
     @empty
