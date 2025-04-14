@@ -152,33 +152,31 @@
 
                                 
                               <div class="row "> 
-                                <span
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                    <span
                                     class="act-user me-2"> <img class="img-size" 
                                     src="{{ Config::get('DocumentConstant.HOTEL_IMAGE_VIEW') }}{{ $item->image }}"
                                     alt=" no Image" style="width: 100px !important; height: 100px;border-radius: 50%;" />
                                 </span>
-                                <span
+                             
+                                </div>
+                                <div class="col-lg-5 col-md-5 col-sm-5">
+                                    <span
                                     class="act-user me-2">{{ ($locations_data->currentPage() - 1) * $locations_data->perPage() + $loop->iteration }}
                                     {{ $item->hotel_name }}
                                 </span>
-                               
-                              </div>
-                              <div class="row">
-                                   <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <span class="">{{ $item->contact_no }}, {{ $item->email }}</span>
-                                    <span class="">Address : {{ $item->address }}</span>
+                                <div>   <span class="">{{ $item->contact_no }}, {{ $item->email }}</span></div>
+                                <span class="">Address : {{ $item->address }}</span>
                                 <p class="">{{ $item->description }}</p>
-                              <span>
-                                   </div>
-                                   <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <img class="img-size"
-                                    src="{{ Config::get('DocumentConstant.QR_VIEW') }}{{ $item->qr_code_path }}"
-                                    alt=" no Image" />
-                                   </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <img class="img-size"
+                                src="{{ Config::get('DocumentConstant.QR_VIEW') }}{{ $item->qr_code_path }}"
+                                alt=" no Image" />
+                            </div>
                                
-                               
-                            </span>
                               </div>
+                             
                             </div>
                             <!-- <p class="mb-1">{{ $item->role }}</p> -->
                         </div>
