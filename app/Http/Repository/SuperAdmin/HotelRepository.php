@@ -16,7 +16,7 @@ class HotelRepository
     public function getLocationList()
     {
         try {
-            $data_location = Hotels::select('id', 'hotel_name','description','type','contact_no','address','email', 'website')
+            $data_location = Hotels::select('id', 'hotel_name','description','type','contact_no','address','email', 'website','qr_code_path')
                 ->where('is_deleted', '0')
                 ->orderBy('id', 'desc')
                 ->paginate(10);

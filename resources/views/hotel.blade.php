@@ -101,6 +101,9 @@
             border-color: #007bff;
         }
     }
+    .img-size{
+        width: 40% !important;
+    }
 </style>
 <div class="main">
     <div class="inner-top container-fluid p-3">
@@ -156,10 +159,20 @@
                                
                               </div>
                               <div class="row">
+                                   <div class="col-lg-6 col-md-6 col-sm-6">
                                     <span class="">{{ $item->contact_no }}, {{ $item->email }}</span>
                                     <span class="">Address : {{ $item->address }}</span>
                                 <p class="">{{ $item->description }}</p>
-                              
+                              <span>
+                                   </div>
+                                   <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <img class="img-size"
+                                    src="{{ Config::get('DocumentConstant.QR_VIEW') }}{{ $item->qr_code_path }}"
+                                    alt=" no Image" />
+                                   </div>
+                               
+                               
+                            </span>
                               </div>
                             </div>
                             <!-- <p class="mb-1">{{ $item->role }}</p> -->
